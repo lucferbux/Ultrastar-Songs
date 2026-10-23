@@ -9,10 +9,13 @@
 | Auth: email link (passwordless) | ✅ enabled |
 | Auth: anonymous (guests) | ✅ enabled |
 | Authorised domains | ✅ `localhost`, `ultrastar-songs.firebaseapp.com`, `ultrastar-songs.web.app` |
-| Firestore rules and indexes | ⏳ not deployed yet (`npm run deploy:rules`) |
-| `catalog` migrated | ⏳ (`npm run migrate`) |
-| Hosting | ⏳ (`npm run deploy`). The only deploy so far is the 2018 Angular app. |
-| Browser API key restricted to our domains | ⏳ (`npm run restrict-key`) |
+| Service Usage API + API Keys API | ✅ enabled (needed by `firebase deploy` and `restrict-key`; free) |
+| Firestore rules and indexes | ✅ deployed 2026-10-23. The legacy open rules are gone. |
+| `catalog` migrated | ✅ 1,030 songs, covers from Deezer |
+| Hosting | ✅ https://ultrastar-songs.web.app |
+| Admin | ✅ lucasfernandezaragon@gmail.com |
+| Browser API key restricted to our domains | ✅ web.app, firebaseapp.com, localhost:5173/4173 |
+| Legacy Angular browser key (in old public git history, unrestricted) | ⚠️ restrict or delete it |
 | App Check (reCAPTCHA Enterprise) | ⏳ optional. See below. |
 
 ## Credentials
@@ -50,6 +53,7 @@ npm run restrict-key                    # 5. lock the browser API key to our dom
 | ---- | ------- |
 | Back up the catalog and sessions | `npm run backup` → `backups/<date>/` |
 | Add new songs from the game | `npm run import:txt -- "/path/to/UltraStar/songs"`, then `npm run covers` |
+| See who signed in recently | `npm run users` |
 | Make someone an admin | `npm run set-admin -- email` |
 | Preview a deploy | `npx firebase hosting:channel:deploy preview` |
 

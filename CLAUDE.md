@@ -58,7 +58,7 @@ that uses the emulators.
 
 See the table in [docs/OPERATIONS.md](docs/OPERATIONS.md#firebase-project-setup).
 
-- **Done:** the web app is registered; Google, email link and anonymous sign-in are enabled;
-  the authorised domains are set.
-- **Pending (needs the user's credentials):** migrate the catalog, deploy the rules (the live
-  rules are still the legacy open ones), deploy hosting, restrict the API key, App Check.
+- **Live** at https://ultrastar-songs.web.app: the catalog is migrated, the rules and indexes
+  are deployed, hosting is deployed, the web key is restricted, and
+  lucasfernandezaragon@gmail.com is admin.
+- **Pending:** App Check; restricting the legacy Angular browser key.

@@ -2,8 +2,7 @@
 
 ## Before the first real karaoke night
 
-- [ ] `npm run auth:admin` → `migrate` → `covers` → `deploy:rules` → `deploy` → `set-admin` → `restrict-key`
-      (see [OPERATIONS.md](OPERATIONS.md#first-production-run)).
+- [x] `npm run auth:admin` → `migrate` → `covers` → `deploy:rules` → `deploy` → `set-admin` → `restrict-key`.
 - [ ] `npm run import:txt` with the UltraStar songs folder, for languages and duets.
 - [ ] Remove the legacy `songsQueue` test document and old `users` profiles you don't recognise
       (Firebase console).

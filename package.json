@@ -20,6 +20,7 @@
     "import:txt": "tsx scripts/import-txt.ts",
     "covers": "tsx scripts/enrich-covers.ts",
     "backup": "tsx scripts/backup.ts",
+    "users": "tsx scripts/list-users.ts",
     "set-admin": "tsx scripts/set-admin.ts",
     "icons": "tsx scripts/icons.ts",
     "deploy:rules": "firebase deploy --only firestore:rules,firestore:indexes",

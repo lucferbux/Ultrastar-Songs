@@ -1,0 +1,89 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function uid() { return request.auth.uid; }
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(uid()))
+        && get(/databases/$(database)/documents/users/$(uid())).data.role == 'admin';
+    }
+    function changed() { return request.resource.data.diff(resource.data).affectedKeys(); }
+
+    // Catalog: everyone signed in reads, only admins edit.
+    match /catalog/{songId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    // Profiles are private (legacy docs hold emails); member names live in each session.
+    match /users/{userId} {
+      allow read: if (signedIn() && userId == uid()) || isAdmin();
+      allow create: if signedIn() && userId == uid()
+        && request.resource.data.role == 'member';
+      allow update: if isAdmin()
+        || (userId == uid() && !changed().hasAny(['role']));
+
+      // "I want to sing this" list.
+      match /favorites/{songId} {
+        allow read, write: if signedIn() && userId == uid();
+      }
+    }
+
+    match /sessions/{sessionId} {
+      function session() { return get(/databases/$(database)/documents/sessions/$(sessionId)).data; }
+      function isMember() { return signedIn() && uid() in session().memberUids; }
+      function isHost() { return signedIn() && (session().hostUid == uid() || isAdmin()); }
+
+      // Any signed-in user can open a session by id or look one up by join code (limit 1);
+      // listing is otherwise restricted to sessions you belong to.
+      allow get: if signedIn();
+      allow list: if signedIn() && (request.query.limit <= 1 || uid() in resource.data.memberUids);
+
+      allow create: if signedIn()
+        && request.resource.data.hostUid == uid()
+        && request.resource.data.memberUids == [uid()]
+        && request.resource.data.members.keys().hasOnly([uid()])
+        && request.resource.data.status == 'open'
+        && request.resource.data.joinCode is string
+        && request.resource.data.joinCode.size() == 6;
+
+      // Host/admin edit anything except who hosts; anyone else may only add themselves,
+      // and members may update their own name/photo.
+      allow update: if (isHost() && !changed().hasAny(['hostUid']))
+        || (signedIn()
+          && resource.data.status == 'open'
+          && changed().hasOnly(['memberUids', 'members'])
+          && request.resource.data.memberUids == resource.data.memberUids.concat([uid()])
+          && !(uid() in resource.data.memberUids)
+          && request.resource.data.members.diff(resource.data.members).affectedKeys().hasOnly([uid()]))
+        || (signedIn()
+          && uid() in resource.data.memberUids
+          && changed().hasOnly(['members'])
+          && request.resource.data.members.diff(resource.data.members).affectedKeys().hasOnly([uid()]));
+
+      allow delete: if isHost();
+
+      match /queue/{itemId} {
+        allow read: if isMember() || isHost();
+
+        allow create: if isMember()
+          && session().status == 'open'
+          && request.resource.data.addedBy == uid()
+          && request.resource.data.status == 'pending'
+          && request.resource.data.songId is string;
+
+        // Host runs the show (order/status); the person who added it may fix the singers.
+        allow update: if isHost()
+          || (isMember() && resource.data.addedBy == uid()
+            && resource.data.status == 'pending'
+            && changed().hasOnly(['singers']));
+
+        allow delete: if isHost()
+          || (isMember() && resource.data.addedBy == uid() && resource.data.status == 'pending');
+      }
+    }
+  }
+}

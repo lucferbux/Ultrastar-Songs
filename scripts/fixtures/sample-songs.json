@@ -1,0 +1,110 @@
+[
+  {
+    "Title": "Bohemian Rhapsody",
+    "Artist": "Queen",
+    "Genre": "Rock",
+    "Year": 1975
+  },
+  {
+    "Title": "Thriller",
+    "Artist": "Michael Jackson",
+    "Genre": "Pop",
+    "Year": 1982
+  },
+  {
+    "Title": "La Bamba",
+    "Artist": "Ritchie Valens",
+    "Genre": "Rock",
+    "Year": 1958
+  },
+  {
+    "Title": "Fiesta Pagana",
+    "Artist": "Mägo de Oz",
+    "Genre": "Folk Metal",
+    "Year": 2000
+  },
+  {
+    "Title": "Mediterráneo",
+    "Artist": "Joan Manuel Serrat",
+    "Genre": "Cantautor",
+    "Year": 1971
+  },
+  {
+    "Title": "Wannabe",
+    "Artist": "Spice Girls",
+    "Genre": "Pop",
+    "Year": 1996
+  },
+  {
+    "Title": "Islands in the Stream",
+    "Artist": "Dolly Parton & Kenny Rogers",
+    "Genre": "Country",
+    "Year": 1983
+  },
+  {
+    "Title": "Livin' on a Prayer",
+    "Artist": "Bon Jovi",
+    "Genre": "Rock",
+    "Year": 1986
+  },
+  {
+    "Title": "Despacito",
+    "Artist": "Luis Fonsi",
+    "Genre": "Reggaeton",
+    "Year": 2017
+  },
+  {
+    "Title": "Lucha de Gigantes",
+    "Artist": "Nacha Pop",
+    "Genre": "Pop",
+    "Year": 1987
+  },
+  {
+    "Title": "Mamma Mia",
+    "Artist": "ABBA",
+    "Genre": "Pop",
+    "Year": 1975
+  },
+  {
+    "Title": "Don't Stop Me Now",
+    "Artist": "Queen",
+    "Genre": "Rock",
+    "Year": 1978
+  },
+  {
+    "Title": "Bailando",
+    "Artist": "Enrique Iglesias",
+    "Genre": "Pop",
+    "Year": 2014
+  },
+  {
+    "Title": "Rolling in the Deep",
+    "Artist": "Adele",
+    "Genre": "Soul",
+    "Year": 2010
+  },
+  {
+    "Title": "Zombie",
+    "Artist": "The Cranberries",
+    "Genre": "Rock",
+    "Year": 1994
+  },
+  {
+    "Title": "Corazón Partío",
+    "Artist": "Alejandro Sanz",
+    "Genre": "Pop",
+    "Year": 1997
+  },
+  {
+    "Title": "Shallow",
+    "Artist": "Lady Gaga & Bradley Cooper",
+    "Genre": "Pop",
+    "Year": 2018
+  },
+  {
+    "Title": "Sweet Child O' Mine",
+    "Artist": "Guns N' Roses",
+    "Genre": "Rock",
+    "Year": 1987
+  }
+]

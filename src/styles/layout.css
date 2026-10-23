@@ -1,0 +1,606 @@
+/* ── App shell ──────────────────────────────────────────────────────── */
+.content {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 16px calc(120px + var(--safe-bottom));
+}
+
+[data-platform='ipados'] .content {
+  max-width: 1040px;
+  padding: 0 28px 48px;
+}
+
+/* ── Floating liquid-glass tab bar (iOS bottom, iPadOS top) ─────────── */
+.tabbar {
+  position: fixed;
+  z-index: 50;
+  left: 50%;
+  bottom: calc(14px + var(--safe-bottom));
+  transform: translateX(-50%);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  width: min(420px, calc(100vw - 32px));
+  height: 64px;
+  padding: 4px;
+  border-radius: 999px;
+}
+
+.tabbar a {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border-radius: 999px;
+  color: var(--label);
+  font-size: 10px;
+  font-weight: 600;
+  transition:
+    color 0.3s,
+    transform 0.35s var(--spring);
+}
+
+.tabbar a:active {
+  transform: scale(0.92);
+}
+
+.tabbar a.active {
+  color: var(--accent);
+}
+
+/* The "lens": a brighter glass capsule that slides under the active tab. */
+.tabbar .lens {
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / var(--tabs));
+  border-radius: 999px;
+  background: var(--fill);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+  transform: translateX(calc(var(--index) * 100%));
+  transition: transform 0.55s var(--spring);
+}
+
+.tabbar .lens[hidden] {
+  display: none;
+}
+
+.tabbar .dot {
+  position: absolute;
+  top: 7px;
+  right: calc(50% - 16px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  box-shadow: 0 0 0 2px var(--glass-bg-strong);
+}
+
+[data-platform='ipados'] .tabbar {
+  top: calc(16px + var(--safe-top));
+  bottom: auto;
+  height: 50px;
+  width: auto;
+  min-width: 460px;
+  padding: 4px;
+}
+
+[data-platform='ipados'] .tabbar a {
+  flex-direction: row;
+  gap: 6px;
+  padding: 0 18px;
+  font-size: 15px;
+}
+
+[data-platform='ipados'] .tabbar a svg {
+  width: 19px;
+  height: 19px;
+}
+
+[data-platform='ipados'] .tabbar .dot {
+  top: 8px;
+  right: 10px;
+}
+
+[data-platform='macos'] .tabbar {
+  display: none;
+}
+
+/* ── macOS window: floating glass sidebar + content ─────────────────── */
+.mac-window {
+  display: grid;
+  grid-template-columns: 248px 1fr;
+  min-height: 100dvh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  padding: 10px 0 10px 10px;
+}
+
+.sidebar-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 14px 10px 10px;
+  border-radius: 18px;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 18px;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.sidebar-brand img {
+  width: 30px;
+  height: 30px;
+}
+
+.sidebar-section {
+  padding: 14px 10px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--label-2);
+}
+
+.sidebar a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 8px;
+  color: var(--label);
+  font-size: 13px;
+}
+
+.sidebar a svg {
+  color: var(--accent);
+}
+
+.sidebar a:hover {
+  background: var(--fill);
+}
+
+.sidebar a.active {
+  background: var(--fill-strong);
+}
+
+.sidebar a .count {
+  margin-left: auto;
+  color: var(--label-2);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 10px;
+  color: var(--label);
+  font-size: 13px;
+}
+
+.sidebar-footer:hover {
+  background: var(--fill);
+}
+
+.mac-main {
+  min-width: 0;
+}
+
+.mac-main .content {
+  max-width: 1080px;
+  padding: 0 32px 48px;
+}
+
+/* Banner layer (turn alerts, offline). */
+.banners {
+  position: fixed;
+  z-index: 60;
+  top: calc(8px + var(--safe-top));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(460px, calc(100vw - 24px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+[data-platform='ipados'] .banners {
+  top: calc(76px + var(--safe-top));
+}
+
+[data-platform='macos'] .banners {
+  left: calc(50% + 124px);
+}
+
+.offline {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--orange);
+}
+
+/* ── Login ──────────────────────────────────────────────────────────── */
+.login {
+  position: relative;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: calc(24px + var(--safe-top)) 20px calc(24px + var(--safe-bottom));
+  overflow: hidden;
+}
+
+.login::before {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  background:
+    radial-gradient(40% 35% at 25% 20%, rgb(107 43 232 / 0.55), transparent 70%),
+    radial-gradient(40% 35% at 80% 30%, rgb(225 60 140 / 0.45), transparent 70%),
+    radial-gradient(45% 40% at 50% 90%, rgb(255 122 69 / 0.4), transparent 70%);
+  filter: blur(30px);
+  animation: drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  to {
+    transform: translate(3%, -3%) rotate(6deg);
+  }
+}
+
+.login-card {
+  position: relative;
+  width: min(400px, 100%);
+  padding: 32px 24px 24px;
+  border-radius: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+}
+
+.login-card .app-icon {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 6px;
+  filter: drop-shadow(0 14px 30px rgb(107 43 232 / 0.45));
+}
+
+.login-card h1 {
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.login-card .tagline {
+  color: var(--label-2);
+  margin: 0 0 10px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--label-2);
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-top: 0.5px solid var(--separator);
+}
+
+/* ── Session ────────────────────────────────────────────────────────── */
+.session-grid {
+  display: grid;
+  gap: 0 28px;
+}
+
+[data-platform='ipados'] .session-grid,
+[data-platform='macos'] .session-grid {
+  grid-template-columns: minmax(280px, 380px) 1fr;
+  align-items: start;
+}
+
+[data-platform='ipados'] .session-aside,
+[data-platform='macos'] .session-aside {
+  position: sticky;
+  top: 90px;
+}
+
+.now-playing {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.now-playing .label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.now-playing .title {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.hero-actions .btn {
+  background: rgb(255 255 255 / 0.22);
+  color: #fff;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.hero-actions .btn.solid {
+  background: #fff;
+  color: #6b2be8;
+}
+
+.position {
+  width: 22px;
+  flex: none;
+  text-align: center;
+  color: var(--label-2);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.row.mine {
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+}
+
+.qr-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.qr-card svg {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  border-radius: 12px;
+}
+
+.join-code {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* ── TV view ────────────────────────────────────────────────────────── */
+.tv {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  color: #fff;
+  background: #0d0620;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 4vw;
+  padding: 6vh 5vw;
+  font-size: clamp(14px, 1.6vw, 30px);
+}
+
+.tv-backdrop {
+  position: absolute;
+  inset: -10%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(60px) saturate(1.6) brightness(0.55);
+  transform: scale(1.1);
+  transition: background-image 1s;
+}
+
+.tv-backdrop.default {
+  background:
+    radial-gradient(40% 40% at 20% 20%, #6b2be8, transparent 70%),
+    radial-gradient(40% 40% at 80% 70%, #e13c8c, transparent 70%),
+    #0d0620;
+}
+
+.tv > :not(.tv-backdrop, .tv-exit) {
+  position: relative;
+}
+
+.tv-now {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2em;
+}
+
+.tv-label {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+.tv-title {
+  font-size: 3.4em;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.tv-artist {
+  font-size: 1.6em;
+  opacity: 0.85;
+}
+
+.tv-singers {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  align-self: flex-start;
+  padding: 0.4em 1em 0.4em 0.5em;
+  border-radius: 999px;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #fff;
+  background: rgb(255 255 255 / 0.14);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+.tv-side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+  justify-content: center;
+}
+
+.tv-queue {
+  list-style: none;
+  margin: 0;
+  padding: 0.6em;
+  border-radius: 1.2em;
+  background: rgb(255 255 255 / 0.1);
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+}
+
+.tv-queue li {
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  padding: 0.55em 0.6em;
+}
+
+.tv-queue li + li {
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.tv-queue .n {
+  width: 1.4em;
+  opacity: 0.6;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.tv-queue .who {
+  margin-left: auto;
+  opacity: 0.7;
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+.tv-join {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  padding: 0.8em;
+  border-radius: 1.2em;
+  background: rgb(255 255 255 / 0.1);
+}
+
+.tv-join svg {
+  flex: none;
+  width: 6em;
+  height: 6em;
+  border-radius: 0.5em;
+}
+
+.tv-code {
+  font-size: 1.8em;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.tv-exit {
+  position: absolute;
+  top: 2vh;
+  right: 2vw;
+  color: rgb(255 255 255 / 0.5);
+  font-size: 0.7em;
+}
+
+@media (max-width: 800px) {
+  .tv {
+    grid-template-columns: 1fr;
+    overflow: auto;
+  }
+}
+
+/* Session sidebar content (QR, singers) sits in the aside column on wide layouts and below the
+   queue on iPhone. */
+.aside-narrow {
+  display: block;
+}
+
+.aside-wide {
+  display: none;
+}
+
+[data-platform='ipados'] .aside-narrow,
+[data-platform='macos'] .aside-narrow {
+  display: none;
+}
+
+[data-platform='ipados'] .aside-wide,
+[data-platform='macos'] .aside-wide {
+  display: block;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+/* iPhone: the turn banner is a tab-bar accessory (like the Music mini player), toasts stay on top. */
+[data-platform='ios'] .banners {
+  top: auto;
+  bottom: calc(86px + var(--safe-bottom));
+  width: min(420px, calc(100vw - 32px));
+}
+
+/* iPad & Mac: toasts appear top-right, like macOS notifications. */
+[data-platform='ipados'] .toasts,
+[data-platform='macos'] .toasts {
+  left: auto;
+  right: 16px;
+  transform: none;
+  align-items: flex-end;
+  width: 360px;
+}
+
+[data-platform='ipados'] .toasts {
+  top: calc(76px + var(--safe-top));
+}

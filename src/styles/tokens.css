@@ -1,0 +1,95 @@
+/* Apple-style design tokens. Light first, dark via prefers-color-scheme. */
+:root {
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  --font-rounded: ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif;
+
+  /* System colours */
+  --accent: #8e3cf7;
+  --accent-2: #e13c8c;
+  --accent-gradient: linear-gradient(135deg, #6b2be8 0%, #b13cf0 50%, #e13c8c 100%);
+  --accent-soft: rgb(142 60 247 / 0.12);
+  --on-accent: #fff;
+  --red: #ff3b30;
+  --green: #34c759;
+  --orange: #ff9500;
+  --yellow: #ffcc00;
+  --blue: #007aff;
+
+  /* Backgrounds & labels (grouped style) */
+  --bg: #f2f2f7;
+  --bg-elevated: #ffffff;
+  --bg-tertiary: #e9e9ee;
+  --fill: rgb(120 120 128 / 0.12);
+  --fill-strong: rgb(120 120 128 / 0.2);
+  --label: #000;
+  --label-2: rgb(60 60 67 / 0.6);
+  --label-3: rgb(60 60 67 / 0.3);
+  --separator: rgb(60 60 67 / 0.18);
+
+  /* Liquid glass */
+  --glass-bg: rgb(255 255 255 / 0.58);
+  --glass-bg-strong: rgb(255 255 255 / 0.78);
+  --glass-border: rgb(255 255 255 / 0.75);
+  --glass-edge: rgb(0 0 0 / 0.06);
+  --glass-highlight: rgb(255 255 255 / 0.9);
+  --glass-shadow: 0 10px 40px rgb(30 10 60 / 0.14), 0 2px 8px rgb(30 10 60 / 0.08);
+  --glass-blur: blur(22px) saturate(190%);
+
+  /* Shape & motion */
+  --radius-s: 10px;
+  --radius-m: 14px;
+  --radius-l: 22px;
+  --radius-xl: 30px;
+  --spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent: #b16cff;
+    --accent-2: #ff5aa5;
+    --accent-soft: rgb(177 108 255 / 0.18);
+    --red: #ff453a;
+    --green: #30d158;
+    --orange: #ff9f0a;
+    --yellow: #ffd60a;
+    --blue: #0a84ff;
+
+    --bg: #000;
+    --bg-elevated: #1c1c1e;
+    --bg-tertiary: #2c2c2e;
+    --fill: rgb(120 120 128 / 0.24);
+    --fill-strong: rgb(120 120 128 / 0.36);
+    --label: #fff;
+    --label-2: rgb(235 235 245 / 0.6);
+    --label-3: rgb(235 235 245 / 0.3);
+    --separator: rgb(84 84 88 / 0.55);
+
+    --glass-bg: rgb(40 40 46 / 0.5);
+    --glass-bg-strong: rgb(44 44 50 / 0.78);
+    --glass-border: rgb(255 255 255 / 0.16);
+    --glass-edge: rgb(0 0 0 / 0.4);
+    --glass-highlight: rgb(255 255 255 / 0.28);
+    --glass-shadow: 0 10px 40px rgb(0 0 0 / 0.5), 0 2px 8px rgb(0 0 0 / 0.3);
+
+    color-scheme: dark;
+  }
+}
+
+/* macOS uses a lighter window background and denser controls. */
+[data-platform='macos'] {
+  --bg: #ffffff;
+  --radius-m: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-platform='macos'] {
+    --bg: #1e1e1e;
+  }
+}

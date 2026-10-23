@@ -1,0 +1,59 @@
+{
+  "name": "ultrastar-companion",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:emulators": "VITE_USE_EMULATORS=true vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "oxlint",
+    "test": "vitest run src/",
+    "test:rules": "firebase emulators:exec --only firestore 'vitest run tests/'",
+    "emulators": "firebase emulators:start --project demo-ultrastar --only auth,firestore --export-on-exit .emulator-data",
+    "emulators:resume": "firebase emulators:start --project demo-ultrastar --only auth,firestore --import .emulator-data --export-on-exit .emulator-data",
+    "seed": "FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 tsx scripts/migrate-legacy.ts --from-file scripts/fixtures/sample-songs.json",
+    "auth:admin": "CLOUDSDK_CONFIG=$HOME/.config/gcloud-ultrastar gcloud auth application-default login && CLOUDSDK_CONFIG=$HOME/.config/gcloud-ultrastar gcloud auth application-default set-quota-project ultrastar-songs",
+    "backup:legacy": "tsx scripts/backup-legacy.ts",
+    "migrate": "tsx scripts/migrate-legacy.ts",
+    "import:txt": "tsx scripts/import-txt.ts",
+    "covers": "tsx scripts/enrich-covers.ts",
+    "backup": "tsx scripts/backup.ts",
+    "set-admin": "tsx scripts/set-admin.ts",
+    "icons": "tsx scripts/icons.ts",
+    "deploy:rules": "firebase deploy --only firestore:rules,firestore:indexes",
+    "deploy": "npm run build && firebase deploy --only hosting",
+    "restrict-key": "scripts/restrict-api-key.sh"
+  },
+  "dependencies": {
+    "@tanstack/react-virtual": "^3.14.22",
+    "firebase": "^12.19.0",
+    "minisearch": "^7.2.0",
+    "qrcode.react": "^4.2.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router": "^7.18.4"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "firebase-admin": "^14.5.0",
+    "firebase-tools": "^15.34.1",
+    "oxlint": "^1.88.0",
+    "sharp": "^0.35.5",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.4",
+    "vite-plugin-pwa": "^2.0.0",
+    "vitest": "^5.0.5"
+  },
+  "overrides": {
+    "@firebase/app-compat": "0.5.20",
+    "@firebase/app": "0.16.4"
+  },
+  "description": "Companion PWA for UltraStar karaoke nights: search the song catalog, save favourites and queue songs for tonight's session."
+}

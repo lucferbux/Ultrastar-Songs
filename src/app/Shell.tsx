@@ -9,6 +9,7 @@ import { Avatar } from '../ui/art'
 import { ErrorBoundary } from '../ui/ErrorBoundary'
 import { Icon, type IconName } from '../ui/Icon'
 import { usePlatform } from '../ui/platform'
+import { useMediaQuery } from '../ui/useMediaQuery'
 import { useOnline } from '../ui/useOnline'
 
 interface Tab {
@@ -54,45 +55,43 @@ function TabBar() {
   )
 }
 
-/** macOS Tahoe-style floating glass sidebar. */
+/** Edge-to-edge sidebar in the macOS 27 / iPadOS 27 style, with per-destination icon colours. */
 function Sidebar() {
   const { user, profile, name } = useUser()
   const { session, queue } = useCurrentSession()
   const { songs } = useCatalog()
   const { ids } = useFavorites(user.uid)
   const pending = queue.filter((i) => i.status === 'pending').length
-  const item = (to: string, icon: IconName, label: string, count?: number, end = false) => (
-    <NavLink to={to} end={end}>
-      <Icon name={icon} size={17} />
-      {label}
+  const item = (to: string, icon: IconName, color: string, label: string, count?: number, end = false) => (
+    <NavLink to={to} end={end} style={{ '--icon-color': color } as React.CSSProperties}>
+      <Icon name={icon} size={17} filled={icon === 'star'} />
+      <span className="label">{label}</span>
       {count !== undefined && <span className="count">{count}</span>}
     </NavLink>
   )
   return (
     <aside className="sidebar">
-      <div className="sidebar-panel glass">
-        <div className="sidebar-brand">
-          <img src="/icon.svg" alt="" />
-          Ultrastar
-        </div>
-        <div className="sidebar-section">Biblioteca</div>
-        {item('/', 'music', 'Canciones', songs.length, true)}
-        {item('/favorites', 'star', 'Favoritas', ids.size)}
-        <div className="sidebar-section">Karaoke</div>
-        {session && item(`/s/${session.id}`, 'mic', session.name, pending)}
-        {session && item(`/s/${session.id}/tv`, 'tv', 'Pantalla TV')}
-        {item('/sessions', 'calendar', 'Sesiones', undefined, true)}
-        {profile?.role === 'admin' && (
-          <>
-            <div className="sidebar-section">Administración</div>
-            {item('/admin', 'gear', 'Catálogo')}
-          </>
-        )}
-        <Link to="/profile" className="sidebar-footer">
-          <Avatar name={name} photo={profile?.photoURL ?? user.photoURL} />
-          <span>{name}</span>
-        </Link>
+      <div className="sidebar-brand">
+        <img src="/icon.svg" alt="" />
+        Ultrastar
       </div>
+      <div className="sidebar-section">Biblioteca</div>
+      {item('/', 'music', 'var(--pink)', 'Canciones', songs.length, true)}
+      {item('/favorites', 'star', 'var(--yellow)', 'Favoritas', ids.size)}
+      <div className="sidebar-section">Karaoke</div>
+      {session && item(`/s/${session.id}`, 'mic', 'var(--accent)', session.name, pending)}
+      {session && item(`/s/${session.id}/tv`, 'tv', 'var(--blue)', 'Pantalla TV')}
+      {item('/sessions', 'calendar', 'var(--orange)', 'Sesiones', undefined, true)}
+      {profile?.role === 'admin' && (
+        <>
+          <div className="sidebar-section">Administración</div>
+          {item('/admin', 'gear', 'var(--gray)', 'Catálogo')}
+        </>
+      )}
+      <Link to="/profile" className="sidebar-footer">
+        <Avatar name={name} photo={profile?.photoURL ?? user.photoURL} />
+        <span>{name}</span>
+      </Link>
     </aside>
   )
 }
@@ -144,6 +143,8 @@ function Banners() {
 
 export function Shell() {
   const platform = usePlatform()
+  // iPadOS: sidebar in landscape / wide windows, floating top tab bar otherwise.
+  const wideIpad = useMediaQuery('(min-width: 1024px)')
   const { pathname } = useLocation()
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -157,11 +158,11 @@ export function Shell() {
     </main>
   )
 
-  if (platform === 'macos') {
+  if (platform === 'macos' || (platform === 'ipados' && wideIpad)) {
     return (
-      <div className="mac-window">
+      <div className="split">
         <Sidebar />
-        <div className="mac-main">{content}</div>
+        <div className="split-main">{content}</div>
         <Banners />
       </div>
     )

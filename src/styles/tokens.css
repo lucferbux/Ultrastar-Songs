@@ -5,16 +5,22 @@
   --font-rounded: ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif;
 
   /* System colours */
-  --accent: #8e3cf7;
-  --accent-2: #e13c8c;
-  --accent-gradient: linear-gradient(135deg, #6b2be8 0%, #b13cf0 50%, #e13c8c 100%);
-  --accent-soft: rgb(142 60 247 / 0.12);
+  /* Accent: one violet-indigo hue, matched to the app icon. */
+  --accent: #6c4ff0;
+  --accent-2: #a594ff;
+  --accent-gradient: linear-gradient(180deg, #7d63ff 0%, #5d3fe6 100%);
+  --accent-soft: rgb(108 79 240 / 0.12);
+  /* "Stage" surface: the icon's dark aubergine with a violet halo (hero card, TV). */
+  --stage: radial-gradient(120% 90% at 50% 0%, rgb(142 123 255 / 0.45), transparent 60%),
+    linear-gradient(180deg, #2b2640 0%, #15121f 100%);
   --on-accent: #fff;
   --red: #ff3b30;
   --green: #34c759;
   --orange: #ff9500;
   --yellow: #ffcc00;
   --blue: #007aff;
+  --pink: #ff2d55;
+  --gray: #8e8e93;
 
   /* Backgrounds & labels (grouped style) */
   --bg: #f2f2f7;
@@ -52,14 +58,17 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --accent: #b16cff;
-    --accent-2: #ff5aa5;
-    --accent-soft: rgb(177 108 255 / 0.18);
+    --accent: #9d8cff;
+    --accent-2: #c2b8ff;
+    --accent-gradient: linear-gradient(180deg, #8b76ff 0%, #6a50f2 100%);
+    --accent-soft: rgb(157 140 255 / 0.18);
     --red: #ff453a;
     --green: #30d158;
     --orange: #ff9f0a;
     --yellow: #ffd60a;
     --blue: #0a84ff;
+    --pink: #ff375f;
+    --gray: #98989d;
 
     --bg: #000;
     --bg-elevated: #1c1c1e;

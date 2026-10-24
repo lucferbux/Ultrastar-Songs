@@ -7,8 +7,8 @@ of three layouts, chosen in [`src/ui/platform.ts`](../src/ui/platform.ts) and wr
 | Platform | When | Chrome |
 | -------- | ---- | ------ |
 | `ios` | Touch screen and small, or a narrow desktop window | Large titles that collapse into a blurred nav bar. A floating **liquid-glass tab bar** at the bottom, with a sliding "lens" under the active tab. The "it's your turn" banner sits just above the tab bar, like the Music mini player. Sheets slide up from the bottom. |
-| `ipados` | Touch screen and ≥ 700 × 600 px | A floating glass tab bar **at the top, centred**, in the iPadOS 26 style. Two-column session layout. Sheets appear as centred dialogs. Toasts appear top-right. |
-| `macos` | Mouse/trackpad and ≥ 900 px wide | A floating, inset **glass sidebar** in the macOS Tahoe style, with sections and counts. Denser 13 px type. Music.app-style rows with genre and year columns. Dialogs, and toasts top-right. |
+| `ipados` | Touch screen and ≥ 700 × 600 px | **Landscape (≥ 1024 px):** an edge-to-edge sidebar in the iPadOS 27 style, touch-sized, with an accent-filled selection. **Portrait:** a floating glass tab bar at the top, centred. Two-column session layout. Sheets appear as centred dialogs. Toasts appear top-right. |
+| `macos` | Mouse/trackpad and ≥ 900 px wide | An **edge-to-edge translucent sidebar** in the macOS 27 style: flush with the window, a hairline separator, and colour per destination. Denser 13 px type. Music.app-style rows with genre and year columns. Dialogs, and toasts top-right. |
 
 To preview a layout from any browser, add `?platform=ios|ipados|macos` to the URL. The choice
 is remembered in `localStorage`; `?platform=auto` clears it.
@@ -18,8 +18,12 @@ is remembered in `localStorage`; `?platform=auto` clears it.
 - **Colour.** Apple system colours, with grouped backgrounds (`--bg`, `--bg-elevated`), label
   levels (`--label`, `--label-2`, `--label-3`), fills and separators. A full dark palette is
   applied with `prefers-color-scheme`.
-- **Accent.** Purple `--accent`, plus the brand gradient `--accent-gradient` (violet → magenta),
-  which matches the app icon.
+- **Accent.** A single violet-indigo hue, `--accent`. `--accent-gradient` is a subtle vertical
+  shade of that one hue, used on filled buttons.
+- **Stage.** `--stage` is the icon's dark aubergine with a violet halo. It's used for the "Now
+  playing" card and the TV view.
+- **Sidebar colours.** `--pink`, `--yellow`, `--orange`, `--blue`, `--gray`. Each sidebar
+  destination keeps its own colour.
 - **Glass.** `--glass-bg`, `--glass-border`, `--glass-highlight`, `--glass-shadow`, and
   `--glass-blur` (`blur(22px) saturate(190%)`).
 - **Motion.** `--spring` (`cubic-bezier(.32,.72,0,1)`) for anything that moves. Every animation
@@ -49,5 +53,5 @@ is remembered in `localStorage`; `?platform=auto` clears it.
 maskable icons crop to their own shape. `npm run icons` renders the PNGs: the 180 px Apple touch
 icon, 192 and 512 px icons, the 512 px maskable icon and a 64 px favicon.
 
-The artwork is a glass microphone with sound waves, stage beams and sparkles on a violet →
-magenta → orange gradient.
+The artwork is a silver microphone with two pairs of thin violet sound waves and a soft halo,
+on a dark aubergine-to-graphite background. It's deliberately quiet, like a system app icon.

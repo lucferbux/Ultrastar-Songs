@@ -112,40 +112,46 @@
   display: none;
 }
 
-/* ── macOS window: floating glass sidebar + content ─────────────────── */
-.mac-window {
+/* ── Split view: edge-to-edge sidebar (macOS 27 / iPadOS 27) + content ───
+   macOS 26 / iPadOS 26 floated the sidebar as an inset glass panel; the 27 releases put it
+   back flush against the window edge — still Liquid Glass, with coloured icons again. */
+.split {
+  --sidebar-w: 240px;
   display: grid;
-  grid-template-columns: 248px 1fr;
+  grid-template-columns: var(--sidebar-w) 1fr;
   min-height: 100dvh;
+}
+
+[data-platform='ipados'] .split {
+  --sidebar-w: 300px;
 }
 
 .sidebar {
   position: sticky;
   top: 0;
   height: 100dvh;
-  padding: 10px 0 10px 10px;
-}
-
-.sidebar-panel {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  padding: 14px 10px 10px;
-  border-radius: 18px;
+  padding: 12px 10px 10px;
+  overflow-y: auto;
+  background: color-mix(in srgb, var(--bg-tertiary) 55%, transparent);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-right: 0.5px solid var(--separator);
 }
 
 .sidebar-brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 4px 8px 18px;
+  padding: 6px 8px 14px;
   font-weight: 700;
   font-size: 15px;
 }
 
 .sidebar-brand img {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
 }
 
 .sidebar-section {
@@ -160,15 +166,23 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 30px;
-  padding: 0 10px;
-  border-radius: 8px;
+  min-height: 28px;
+  padding: 0 8px;
+  border-radius: 6px;
   color: var(--label);
   font-size: 13px;
 }
 
+.sidebar a .label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Each destination keeps its own system colour, as in macOS 27 / iPadOS 27 sidebars. */
 .sidebar a svg {
-  color: var(--accent);
+  flex: none;
+  color: var(--icon-color, var(--accent));
 }
 
 .sidebar a:hover {
@@ -177,6 +191,7 @@
 
 .sidebar a.active {
   background: var(--fill-strong);
+  font-weight: 500;
 }
 
 .sidebar a .count {
@@ -192,7 +207,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px;
-  border-radius: 10px;
+  border-radius: 8px;
   color: var(--label);
   font-size: 13px;
 }
@@ -201,13 +216,64 @@
   background: var(--fill);
 }
 
-.mac-main {
+/* iPad: same structure, touch-sized. */
+[data-platform='ipados'] .sidebar {
+  padding: calc(16px + var(--safe-top)) 14px 14px;
+}
+
+[data-platform='ipados'] .sidebar-brand {
+  font-size: 20px;
+  padding: 6px 10px 16px;
+}
+
+[data-platform='ipados'] .sidebar-section {
+  font-size: 13px;
+  padding: 18px 12px 6px;
+}
+
+[data-platform='ipados'] .sidebar a {
+  min-height: 44px;
+  gap: 12px;
+  padding: 0 12px;
+  border-radius: 12px;
+  font-size: 17px;
+}
+
+[data-platform='ipados'] .sidebar a svg {
+  width: 22px;
+  height: 22px;
+}
+
+[data-platform='ipados'] .sidebar a.active {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+[data-platform='ipados'] .sidebar a.active svg,
+[data-platform='ipados'] .sidebar a.active .count {
+  color: var(--on-accent);
+}
+
+[data-platform='ipados'] .sidebar-footer {
+  font-size: 17px;
+  padding: 10px 12px;
+}
+
+.split-main {
   min-width: 0;
 }
 
-.mac-main .content {
+.split-main .content {
   max-width: 1080px;
   padding: 0 32px 48px;
+}
+
+[data-platform='ipados'] .split .page-header {
+  padding-top: calc(40px + var(--safe-top));
+}
+
+.split .banners {
+  left: calc(50% + var(--sidebar-w) / 2);
 }
 
 /* Banner layer (turn alerts, offline). */
@@ -228,9 +294,6 @@
   top: calc(76px + var(--safe-top));
 }
 
-[data-platform='macos'] .banners {
-  left: calc(50% + 124px);
-}
 
 .offline {
   align-self: center;
@@ -258,18 +321,9 @@
   content: '';
   position: fixed;
   inset: -20%;
-  background:
-    radial-gradient(40% 35% at 25% 20%, rgb(107 43 232 / 0.55), transparent 70%),
-    radial-gradient(40% 35% at 80% 30%, rgb(225 60 140 / 0.45), transparent 70%),
-    radial-gradient(45% 40% at 50% 90%, rgb(255 122 69 / 0.4), transparent 70%);
-  filter: blur(30px);
-  animation: drift 18s ease-in-out infinite alternate;
-}
-
-@keyframes drift {
-  to {
-    transform: translate(3%, -3%) rotate(6deg);
-  }
+  /* A single soft halo behind the icon, echoing the icon itself. */
+  background: radial-gradient(38% 32% at 50% 30%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%);
+  pointer-events: none;
 }
 
 .login-card {
@@ -287,7 +341,7 @@
   width: 96px;
   height: 96px;
   margin: 0 auto 6px;
-  filter: drop-shadow(0 14px 30px rgb(107 43 232 / 0.45));
+  filter: drop-shadow(0 16px 28px rgb(20 12 40 / 0.35));
 }
 
 .login-card h1 {
@@ -369,7 +423,7 @@
 
 .hero-actions .btn.solid {
   background: #fff;
-  color: #6b2be8;
+  color: #2b2640;
 }
 
 .position {
@@ -410,7 +464,7 @@
   inset: 0;
   overflow: hidden;
   color: #fff;
-  background: #0d0620;
+  background: #15121f;
   display: grid;
   grid-template-columns: 1.4fr 1fr;
   gap: 4vw;
@@ -429,10 +483,7 @@
 }
 
 .tv-backdrop.default {
-  background:
-    radial-gradient(40% 40% at 20% 20%, #6b2be8, transparent 70%),
-    radial-gradient(40% 40% at 80% 70%, #e13c8c, transparent 70%),
-    #0d0620;
+  background: var(--stage);
 }
 
 .tv > :not(.tv-backdrop, .tv-exit) {
@@ -603,4 +654,9 @@
 
 [data-platform='ipados'] .toasts {
   top: calc(76px + var(--safe-top));
+}
+
+/* With a sidebar there's no top tab bar to clear. */
+[data-platform] .split .banners {
+  top: calc(8px + var(--safe-top));
 }

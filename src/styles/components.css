@@ -557,6 +557,11 @@
   border: 0.5px solid var(--separator);
 }
 
+/* Inputs that sit inside a list row are part of the row, not boxed fields. */
+[data-platform='macos'] .list .input {
+  border: none;
+}
+
 .switch {
   position: relative;
   width: 51px;
@@ -727,8 +732,10 @@
   border-radius: var(--radius-xl);
   padding: 18px;
   color: #fff;
-  background: var(--accent-gradient);
-  box-shadow: 0 18px 50px color-mix(in srgb, var(--accent) 35%, transparent);
+  background: var(--stage);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.12),
+    0 14px 40px rgb(20 12 40 / 0.28);
 }
 
 .hero::after {
@@ -737,7 +744,7 @@
   inset: -40% -20% auto auto;
   width: 70%;
   aspect-ratio: 1;
-  background: radial-gradient(circle, rgb(255 255 255 / 0.35), transparent 60%);
+  background: radial-gradient(circle, rgb(255 255 255 / 0.08), transparent 60%);
   pointer-events: none;
 }
 
